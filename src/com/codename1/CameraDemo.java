@@ -3,14 +3,14 @@ package com.codename1;
 import com.codename1.capture.Capture;
 import com.codename1.components.ImageViewer;
 import com.codename1.io.Log;
-import com.codename1.ui.Button;
-import com.codename1.ui.ComponentGroup;
 import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
+import com.codename1.ui.FontImage;
 import com.codename1.ui.Form;
 import com.codename1.ui.Image;
 import com.codename1.ui.Toolbar;
 import com.codename1.ui.layouts.BorderLayout;
+import com.codename1.ui.plaf.Style;
 import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
 
@@ -39,10 +39,11 @@ public class CameraDemo {
         }
     
         Form f = new Form("Camera", new BorderLayout());
-        Button b = new Button("Take A Picture");
         ImageViewer l = new ImageViewer();
         
-        b.addActionListener(evt -> {
+        Style s = UIManager.getInstance().getComponentStyle("TitleCommand");
+        Image camera = FontImage.createMaterial(FontImage.MATERIAL_CAMERA, s, 4);
+        f.getToolbar().addCommandToRightBar("", camera, (ev) -> {
             String path = Capture.capturePhoto();
             try {
                 Image i1 = Image.createImage(path);
@@ -54,8 +55,7 @@ public class CameraDemo {
             }
         });
         
-        f.add(BorderLayout.SOUTH, ComponentGroup.enclose(b)).
-                add(BorderLayout.CENTER, l);
+        f.add(BorderLayout.CENTER, l);
         
         f.show();
     }
