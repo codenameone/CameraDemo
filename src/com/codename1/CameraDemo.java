@@ -2,6 +2,7 @@ package com.codename1;
 
 import com.codename1.capture.Capture;
 import com.codename1.components.ImageViewer;
+import com.codename1.components.ToastBar;
 import com.codename1.io.Log;
 import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
@@ -42,17 +43,27 @@ public class CameraDemo {
         ImageViewer l = new ImageViewer();
         
         Style s = UIManager.getInstance().getComponentStyle("TitleCommand");
-        Image camera = FontImage.createMaterial(FontImage.MATERIAL_CAMERA, s, 4);
+        Image camera = FontImage.createMaterial(FontImage.MATERIAL_CAMERA_ALT, s, 4);
+        Image gallery = FontImage.createMaterial(FontImage.MATERIAL_PHOTO, s, 4);
+        
         f.getToolbar().addCommandToRightBar("", camera, (ev) -> {
             String path = Capture.capturePhoto();
-            try {
-                Image i1 = Image.createImage(path);
-                l.setImage(i1);
-                f.revalidate();
-            }catch (Exception ex) {
-                Log.e(ex);
-                Dialog.show("Error", "Error during image loading: " + ex, "OK", null);
+            if(path == null) {
+                showToast("User canceled Camera");
+                return;
             }
+            setImage(path, l);
+        });
+
+        f.getToolbar().addCommandToLeftBar("", gallery, (ev) -> {
+            Display.getInstance().openGallery(e -> {
+                if(e == null || e.getSource() == null) {
+                    showToast("User canceled Gallery");
+                    return;
+                }
+                String filePath = (String)e.getSource();
+                setImage(filePath, l);
+            }, Display.GALLERY_IMAGE);
         });
         
         f.add(BorderLayout.CENTER, l);
@@ -60,6 +71,26 @@ public class CameraDemo {
         f.show();
     }
 
+    private void setImage(String filePath, ImageViewer iv) {
+            try {
+                Image i1 = Image.createImage(filePath);
+                iv.setImage(i1);
+                iv.getParent().revalidate();
+            } catch (Exception ex) {
+                Log.e(ex);
+                Dialog.show("Error", "Error during image loading: " + ex, "OK", null);
+            }
+    }
+    
+    private void showToast(String text) {
+        Image errorImage = FontImage.createMaterial(FontImage.MATERIAL_ERROR, UIManager.getInstance().getComponentStyle("Title"), 4);
+        ToastBar.Status status = ToastBar.getInstance().createStatus();
+        status.setMessage("User Cancelled Camera");
+        status.setIcon(errorImage);
+        status.setExpires(2000);
+        status.show();
+    }
+    
     public void stop(){
         current = Display.getInstance().getCurrent();
     }
