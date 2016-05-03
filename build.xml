@@ -315,6 +315,21 @@
             />
     </target>    
     
+    <target name="build-for-javascript-sync" depends="clean,copy-javascript-override,copy-libs,jar,clean-override">
+        <codeNameOne 
+            jarFile="${dist.jar}"
+            displayName="${codename1.displayName}"
+            packageName = "${codename1.packageName}"
+            mainClassName = "${codename1.mainName}"
+            version="${codename1.version}"
+            icon="${codename1.icon}"
+            vendor="${codename1.vendor}"
+            subtitle="${codename1.secondaryTitle}"
+            automated="true"
+            targetType="javascript"
+            />
+    </target>    
+    
     <target name="build-for-rim-device" depends="clean,copy-rim-override,copy-libs,jar,clean-override">
         <codeNameOne 
             jarFile="${dist.jar}"
