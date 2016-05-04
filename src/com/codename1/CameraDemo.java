@@ -85,7 +85,7 @@ public class CameraDemo {
     private void showToast(String text) {
         Image errorImage = FontImage.createMaterial(FontImage.MATERIAL_ERROR, UIManager.getInstance().getComponentStyle("Title"), 4);
         ToastBar.Status status = ToastBar.getInstance().createStatus();
-        status.setMessage("User Cancelled Camera");
+        status.setMessage(text);
         status.setIcon(errorImage);
         status.setExpires(2000);
         status.show();
