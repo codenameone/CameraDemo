@@ -41,12 +41,8 @@ public class CameraDemo {
     
         Form f = new Form("Camera", new BorderLayout());
         ImageViewer l = new ImageViewer();
-        
-        Style s = UIManager.getInstance().getComponentStyle("TitleCommand");
-        Image camera = FontImage.createMaterial(FontImage.MATERIAL_CAMERA_ALT, s, 4);
-        Image gallery = FontImage.createMaterial(FontImage.MATERIAL_PHOTO, s, 4);
-        
-        f.getToolbar().addCommandToRightBar("", camera, (ev) -> {
+                
+        f.getToolbar().addMaterialCommandToRightBar("", FontImage.MATERIAL_CAMERA_ALT, 4, (ev) -> {
             String path = Capture.capturePhoto();
             if(path == null) {
                 showToast("User canceled Camera");
@@ -55,7 +51,7 @@ public class CameraDemo {
             setImage(path, l);
         });
 
-        f.getToolbar().addCommandToLeftBar("", gallery, (ev) -> {
+        f.getToolbar().addMaterialCommandToLeftBar("", FontImage.MATERIAL_PHOTO, 4, (ev) -> {
             Display.getInstance().openGallery(e -> {
                 if(e == null || e.getSource() == null) {
                     showToast("User canceled Gallery");
